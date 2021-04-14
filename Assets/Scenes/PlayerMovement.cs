@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 mousePos;
 
     // Update is called once per frame
+    void Start(){
+        
+    }
     void Update() {
         processInputs();
     }
