@@ -364,9 +364,10 @@ GameObject:
   - component: {fileID: 1270578522}
   - component: {fileID: 1270578526}
   - component: {fileID: 1270578527}
+  - component: {fileID: 1270578528}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -515,6 +516,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1270578528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270578521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269e7f23493413d479bd21f762b768b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 20
+  cellSize: 6
+  pathLengthRelativeToSize: 4
+  wallThickness: 1
+  labyrinthWallPrefab: {fileID: 4632246349464939363, guid: 90e3c54b184a2144397af35075ca8f75, type: 3}
 --- !u!1001 &1400621095
 PrefabInstance:
   m_ObjectHideFlags: 0
