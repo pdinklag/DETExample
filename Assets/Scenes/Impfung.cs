@@ -5,26 +5,68 @@ using UnityEngine;
 public class Impfung : MonoBehaviour
 {
     public Renderer renderer;
+
+    public int distanceInfizierung=10;
     public bool Geimpft = false;
     
     public bool Impfgegner=false;
 
+    public boolean infiziert=false;
     public bool wuetend=false;
+
+    private static Color colorImpfgegner=Color.yellow;
+
+    private static Color colorInfiziert=Color.red;
+
+    private static Color colorWuetend=Color.magenta;
+
+    private Color colorGeheilt=Color.blue;
+
+    private Color colorNormal=colorInfiziert.green;
     // Start is called before the first frame update
     void Start()
     {
-       if(!Impfgegner)
+         System.Random random=new System.Random();
+        if(random.NextDouble<=0.1)
         {
-            renderer.material.SetColor("_Color", Color.cyan);
+            Impfgegner=true;
+        }
+        if(random.NextDouble<=0.1)
+        {
+            infiziert=true;
+        }
+       setColor();
+    }
+    private void setColor()
+    {
+        Color nextColor=null;
+        if(Impfgegner)
+        {
+            if(wuetend)
+            {
+                nextColor=colorWuetend;
+            }
+            else
+            {
+                nextColor=colorImpfgegner;
+            }
+        }
+        else if(infiziert)
+        {
+            nextColor=colorInfiziert;
+        }
+        else if(Geimpft)
+        {
+            nextColor=colorGeheilt;
         }
         else
         {
-            renderer.material.SetColor("_Color", Color.black);
+            nextColor=colorNormal;
         }
+        renderer.material.SetColor("_Color", nextColor);
     }
-
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
     }
@@ -34,16 +76,13 @@ public class Impfung : MonoBehaviour
             bullet bullet=other.GetComponent<bullet>();
             if(bullet.typ==0)
             {
+                Geimpft=true;
+                infiziert=false;
                 if(Impfgegner)
                 {
-                    renderer.material.SetColor("_Color", Color.red);
                     wuetend=true;
                 }
-                else
-                {
-                    renderer.material.SetColor("_Color", Color.green);
-                    Geimpft=true;
-                }
+                setColor();
             }
             else
             {
