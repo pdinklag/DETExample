@@ -533,6 +533,7 @@ MonoBehaviour:
   pathLengthRelativeToSize: 4
   wallThickness: 1
   labyrinthWallPrefab: {fileID: 4632246349464939363, guid: 90e3c54b184a2144397af35075ca8f75, type: 3}
+  cam: {fileID: 519420028}
 --- !u!1001 &1400621095
 PrefabInstance:
   m_ObjectHideFlags: 0
