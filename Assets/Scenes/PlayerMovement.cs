@@ -11,14 +11,19 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Start(){
-        
     }
     void Update() {
         processInputs();
     }
 
     void FixedUpdate() {
+        MoveCamera();
         Move();
+    }
+
+    void MoveCamera() {
+        Vector2 relPos = 0.04f * (gameObject.transform.position - cam.transform.position);
+        cam.transform.position += (Vector3) relPos;
     }
 
     void processInputs() {

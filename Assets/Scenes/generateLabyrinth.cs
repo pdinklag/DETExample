@@ -11,6 +11,7 @@ public class generateLabyrinth : MonoBehaviour
     public int pathLengthRelativeToSize;
     public float wallThickness;
     public GameObject labyrinthWallPrefab;
+    public GameObject cam;
     private bool[] isWallDeleted;
 
     void Start()
@@ -164,6 +165,8 @@ public class generateLabyrinth : MonoBehaviour
             }
         }
         Tuple<Cell,Cell> bestCellPair = bestCellPairs[rand.Next(bestCellPairs.Count)];
+        Cell cellEntrance = bestCellPair.Item1;
+        Cell cellExit = bestCellPair.Item2;
 
         // add outer walls and save entrance and exit
         List<Wall> entranceAndExit = new List<Wall>();
@@ -181,7 +184,7 @@ public class generateLabyrinth : MonoBehaviour
             if (cell.GetPosY() == size-1) {
                 wallsToAdd.Add(new Wall(cell, new Cell(cell.GetPosX(), size)));
             }
-            if (cell.Equals(bestCellPair.Item1) || cell.Equals(bestCellPair.Item2)) {
+            if (cell.Equals(cellExit)) {
                 entranceAndExit.Add(wallsToAdd[0]);
                 wallsToAdd.RemoveAt(0);
             }
@@ -195,6 +198,10 @@ public class generateLabyrinth : MonoBehaviour
             Vector4 posAndSize = GetPosAndSizeOfWall(wall);
             GenerateRectangle(posAndSize.x, posAndSize.y, posAndSize.z, posAndSize.w);
         }
+
+        Vector3 startPos = cellEntrance.GetCenterPosition(cellSize);
+        gameObject.transform.position = startPos;
+        cam.transform.position = startPos + new Vector3(0.0f, 0.0f, -1.0f);
     }
 
     private List<KeyValuePair<string, int>> CalculatePathLengths(UndirectedGraph graph, string tagFrom) {
@@ -265,6 +272,10 @@ public class generateLabyrinth : MonoBehaviour
             string[] indices = tag.Split(',');
             x = Convert.ToInt32(indices[0]);
             y = Convert.ToInt32(indices[1]);
+        }
+
+        public Vector2 GetCenterPosition(int cellSize) {
+            return new Vector2(GetPosX() + 0.5f, GetPosY() + 0.5f) * cellSize;
         }
 
         public override string ToString() {
