@@ -12,6 +12,7 @@ public class generateLabyrinth : MonoBehaviour
     public float wallThickness;
     public GameObject labyrinthWallPrefab;
     public GameObject cam;
+    public Vector3 startPosition;
     private bool[] isWallDeleted;
 
     void Start()
@@ -199,9 +200,9 @@ public class generateLabyrinth : MonoBehaviour
             GenerateRectangle(posAndSize.x, posAndSize.y, posAndSize.z, posAndSize.w);
         }
 
-        Vector3 startPos = cellEntrance.GetCenterPosition(cellSize);
-        gameObject.transform.position = startPos;
-        cam.transform.position = startPos + new Vector3(0.0f, 0.0f, -1.0f);
+        startPosition = cellEntrance.GetCenterPosition(cellSize);
+        gameObject.transform.position = startPosition;
+        cam.transform.position = startPosition + new Vector3(0.0f, 0.0f, -1.0f);
     }
 
     private List<KeyValuePair<string, int>> CalculatePathLengths(UndirectedGraph graph, string tagFrom) {
