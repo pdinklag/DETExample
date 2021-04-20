@@ -26,9 +26,11 @@ public class WutbuergerAttacke : MonoBehaviour
                     Vector3 positionOther=other.gameObject.transform.position;
                     Vector3 flug=(positionPlayer-positionOther);
                     rigidbody.MovePosition(rigidbody.position+new Vector2(flug.x,flug.y));
-
             }
         } 
+    }
+     void OnCollisionEnter2D(Collision2D collision) {
+        Debug.Log("Beruehrt");
     }
     bool Wutbuerger(GameObject other)
     {
