@@ -11,21 +11,19 @@ public class RandomMovement : MonoBehaviour
 
     private int timeToNextMovementChange;
     
+    private int timeNoMovement;
     Impfung meineImpfung;
     static Transform playerTransformation;
     void Start()
     {
         timeToNextMovementChange=0;
+        timeNoMovement=0;
         var player = GameObject.FindGameObjectWithTag("Player");
         playerTransformation=player.transform;
         meineImpfung=gameObject.GetComponent<Impfung>();
     }
     void setRandomMovement()
     {
-        if(meineImpfung.wuetend)
-        {
-            moveSpeed*=2;
-        }
         System.Random random=new System.Random();
         moveDirection.x=(float)random.NextDouble()*2-1;
         moveDirection.y=(float)random.NextDouble()*2-1;
@@ -42,26 +40,36 @@ public class RandomMovement : MonoBehaviour
     }
 
     void FixedUpdate() {
-        if(meineImpfung.wuetend)
+        if(timeNoMovement>0)
         {
-           setMovementToPlayer();
+            timeNoMovement--;
         }
         else
         {
-            if(timeToNextMovementChange==0)
+            if(meineImpfung.wuetend)
             {
-                 setRandomMovement();
+            setMovementToPlayer();
             }
             else
             {
-                timeToNextMovementChange--;
+                if(timeToNextMovementChange==0)
+                {
+                    setRandomMovement();
+                }
+                else
+                {
+                    timeToNextMovementChange--;
+                }
             }
-        }
         Move();
+        }
     }
-
-
     void Move() {
         rigidbody.velocity = new Vector2(moveDirection.x, moveDirection.y).normalized * moveSpeed;
+    }
+    public void ruhigStellen(int dauer)
+    {
+        moveDirection=new Vector2(0,0);
+        timeNoMovement=Math.Max(dauer,timeNoMovement);
     }
 }

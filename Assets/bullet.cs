@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class bullet : MonoBehaviour
 {
+    public int typ=0;//typ 0:Impfung, typ1:Betaeubung
      void Start()
     {
-        //GetComponent<Rigidbody>().isKinematic=true;
+      
     }
     void OnTriggerEnter2D(Collider2D other) { 
        Destroy(gameObject);

@@ -31,16 +31,29 @@ public class Impfung : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) { 
         if(other.CompareTag("Bullet"))
         {
-            if(Impfgegner)
+            bullet bullet=other.GetComponent<bullet>();
+            if(bullet.typ==0)
             {
-                renderer.material.SetColor("_Color", Color.red);
-                 wuetend=true;
-             }
-             else
+                if(Impfgegner)
+                {
+                    renderer.material.SetColor("_Color", Color.red);
+                    wuetend=true;
+                }
+                else
+                {
+                    renderer.material.SetColor("_Color", Color.green);
+                    Geimpft=true;
+                }
+            }
+            else
             {
-                 renderer.material.SetColor("_Color", Color.green);
-                Geimpft=true;
+                ruhigStellen(100);   
             }
         } 
+    }
+    public void ruhigStellen(int dauer)
+    {
+        RandomMovement randomMovement=gameObject.GetComponent<RandomMovement>();
+        randomMovement.ruhigStellen(dauer);
     }
 }
