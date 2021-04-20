@@ -6,32 +6,32 @@ public class Impfbar : MonoBehaviour
 {
     public Renderer renderer;
 
-    public int distanceInfizierung=10;
-    public bool Geimpft = false;
+    public int distanceInfizierung=50;
+    public bool geimpft = false;
     
     public bool Impfgegner=false;
 
     public bool infiziert=false;
     public bool wuetend=false;
 
-    private static Color colorImpfgegner=Color.yellow;
+    private static Color colorImpfgegner=new Color(1f, 0.92f, 0.016f, 1f);
 
     private static Color colorInfiziert=Color.red;
 
-    private static Color colorWuetend=Color.magenta;
+    private static Color colorWuetend=new Color(1f, 0f, 1f, 1f);
 
     private Color colorGeheilt=Color.blue;
 
-    private Color colorNormal=Color.green;
+    private Color colorNormal=new Color(0f,1f,0f,1f);
     // Start is called before the first frame update
     void Start()
     {
          System.Random random=new System.Random();
-        if(random.NextDouble<=0.1)
+        if(random.Next(10)<=1)
         {
             Impfgegner=true;
         }
-        if(random.NextDouble<=0.1)
+        if(random.Next(10)<=1)
         {
             infiziert=true;
         }
@@ -39,7 +39,7 @@ public class Impfbar : MonoBehaviour
     }
     private void setColor()
     {
-        Color nextColor=null;
+        Color nextColor;
         if(Impfgegner)
         {
             if(wuetend)
@@ -55,7 +55,7 @@ public class Impfbar : MonoBehaviour
         {
             nextColor=colorInfiziert;
         }
-        else if(Geimpft)
+        else if(geimpft)
         {
             nextColor=colorGeheilt;
         }
@@ -76,7 +76,7 @@ public class Impfbar : MonoBehaviour
             bullet bullet=other.GetComponent<bullet>();
             if(bullet.typ==0)
             {
-                Geimpft=true;
+                geimpft=true;
                 infiziert=false;
                 if(Impfgegner)
                 {
@@ -96,23 +96,30 @@ public class Impfbar : MonoBehaviour
         randomMovement.ruhigStellen(dauer);
     }
 
-    public void moeglicheInfektion(Impfbar infiziert)
+    public void moeglicheInfektion(Impfbar infizierter)
     {
-        if(!infiziert&&inInfektionsDistanz(infiziert))
+        if(!infiziert&&!geimpft&&inInfektionsDistanz(infizierter))
         {
-            infiziert=true;
-            setColor();
+            infizieren();
         }
     }
     public bool inInfektionsDistanz(Impfbar infizierterAnderer)
     {
-        Vector3 positionOther=infizierterAnderer.gameObject.position;
+        Vector3 positionOther=infizierterAnderer.gameObject.transform.position;
         Vector3 position=gameObject.transform.position;
-        Vector3 abstand=positionOther-position;
-        if(abstand.magnitude<=distanceInfizierung)
+        Vector3 abstandsvector=positionOther-position;
+        int abstand=(int)abstandsvector.magnitude;
+        Debug.Log(abstand);
+        if(abstand<=distanceInfizierung)
         {
+            
             return true;
         }
         return false;
+    }
+    public void infizieren()
+    {
+        infiziert=true;
+        setColor();
     }
 }
