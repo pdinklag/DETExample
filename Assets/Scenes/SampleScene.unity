@@ -528,12 +528,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269e7f23493413d479bd21f762b768b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 20
-  cellSize: 6
-  pathLengthRelativeToSize: 4
-  wallThickness: 1
   labyrinthWallPrefab: {fileID: 4632246349464939363, guid: 90e3c54b184a2144397af35075ca8f75, type: 3}
   cam: {fileID: 519420028}
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &1400621095
 PrefabInstance:
   m_ObjectHideFlags: 0
