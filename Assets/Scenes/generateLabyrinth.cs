@@ -63,8 +63,6 @@ public class generateLabyrinth : MonoBehaviour
         for (int i = 0; i < size-1; i++) {
             walls.Add(new Wall(cells[i][size-1], cells[i+1][size-1]));
             walls.Add(new Wall(cells[size-1][i], cells[size-1][i+1]));
-        }
-        for (int i = 0; i < size-1; i++) {
             for (int j = 0; j < size-1; j++) {
                 Cell cell = cells[i][j];
                 walls.Add(new Wall(cell, cells[i+1][j]));
@@ -83,7 +81,7 @@ public class generateLabyrinth : MonoBehaviour
         }
 
         // remove Walls randomly until all cells are connected
-        List<Wall> remainingWalls = new List<Wall>();
+        List<Wall> wallsTGenerate = new List<Wall>();
         List<Wall> removedWalls = new List<Wall>();
         System.Random rand = new System.Random();
         while (walls.Count != 0) {
@@ -103,7 +101,7 @@ public class generateLabyrinth : MonoBehaviour
                 }
                 removedWalls.Add(randomWall);
             } else {
-                remainingWalls.Add(randomWall);
+                wallsTGenerate.Add(randomWall);
             }
             walls.RemoveAt(randomIndex);
         }
@@ -139,9 +137,6 @@ public class generateLabyrinth : MonoBehaviour
         int minimumDeviation = size*size;
         // consider each outer cell as entrance
         foreach (Cell cell in outerCells) {
-            if (minimumDeviation == 0) {
-                break;
-            }
             List<KeyValuePair<string, int>> destinations = CalculatePathLengths(labyrinth, cell.GetTag());
 
             // consider each destination cell as exit
@@ -151,7 +146,7 @@ public class generateLabyrinth : MonoBehaviour
                 // check if the current destination cell is outer cell
                 if (xDest == 0 || xDest == size-1 || yDest == 0 || yDest == size-1) {
                     int currentDeviation = Math.Abs(destination.Value-wantedPathLength);
-                    // check if its path length deviates less from the wanted path length
+                    // check if its path length deviates not more from the wanted path length
                     if (currentDeviation <= minimumDeviation) {
                         if (currentDeviation < minimumDeviation) {
                             minimumDeviation = currentDeviation;
@@ -164,30 +159,39 @@ public class generateLabyrinth : MonoBehaviour
                     }
                 }
             }
+            if (minimumDeviation == 0) {
+                break;
+            }
         }
         Tuple<Cell,Cell> bestCellPair = bestCellPairs[rand.Next(bestCellPairs.Count)];
 
-        // add outer walls anywhere but at the entrance and exit
-        List<Cell> cellsToExclude = new List<Cell>();
-        cellsToExclude.Add(bestCellPair.Item1);
-        cellsToExclude.Add(bestCellPair.Item2);
-        foreach (Cell cell in outerCells.Except(cellsToExclude)) {
+        // add outer walls and save entrance and exit
+        List<Wall> entranceAndExit = new List<Wall>();
+        foreach (Cell cell in outerCells) {
+            List<Wall> wallsToAdd = new List<Wall>();
             if (cell.GetPosX() == 0) {
-                remainingWalls.Add(new Wall(new Cell(-1, cell.GetPosY()), cell));
+                wallsToAdd.Add(new Wall(new Cell(-1, cell.GetPosY()), cell));
             }
             if (cell.GetPosX() == size-1) {
-                remainingWalls.Add(new Wall(cell, new Cell(size, cell.GetPosY())));
+                wallsToAdd.Add(new Wall(cell, new Cell(size, cell.GetPosY())));
             }
             if (cell.GetPosY() == 0) {
-                remainingWalls.Add(new Wall(new Cell(cell.GetPosX(), -1), cell));
+                wallsToAdd.Add(new Wall(new Cell(cell.GetPosX(), -1), cell));
             }
             if (cell.GetPosY() == size-1) {
-                remainingWalls.Add(new Wall(cell, new Cell(cell.GetPosX(), size)));
+                wallsToAdd.Add(new Wall(cell, new Cell(cell.GetPosX(), size)));
+            }
+            if (cell.Equals(bestCellPair.Item1) || cell.Equals(bestCellPair.Item2)) {
+                entranceAndExit.Add(wallsToAdd[0]);
+                wallsToAdd.RemoveAt(0);
+            }
+            foreach (Wall wall in wallsToAdd) {
+                wallsTGenerate.Add(wall);
             }
         }
 
         // generate walls
-        foreach (Wall wall in remainingWalls) {
+        foreach (Wall wall in wallsTGenerate) {
             Vector4 posAndSize = GetPosAndSizeOfWall(wall);
             GenerateRectangle(posAndSize.x, posAndSize.y, posAndSize.z, posAndSize.w);
         }
@@ -251,6 +255,10 @@ public class generateLabyrinth : MonoBehaviour
 
         public String GetTag() {
             return GetPosX().ToString() + "," + GetPosY().ToString();
+        }
+
+        public bool Equals(Cell cell) {
+            return GetPosX() == cell.GetPosX() && GetPosY() == cell.GetPosY();
         }
 
         public static void GetPosFromTag(string tag, out int x, out int y) {
@@ -329,12 +337,12 @@ public class generateLabyrinth : MonoBehaviour
 
         public bool AreConnected(string tagV, string tagU) {
             Vertex v, u;
-            return !vertices.TryGetValue(tagV, out v) || !vertices.TryGetValue(tagU, out u) || v.GetAdjacentVertices().ContainsKey(tagU);
+            return TryGetEdge(tagV, tagU, out v, out u) && v.GetAdjacentVertices().ContainsKey(tagU);
         }
 
         public bool Connect(string tagV, string tagU) {
             Vertex v, u;
-            if (!vertices.TryGetValue(tagV, out v) || !vertices.TryGetValue(tagU, out u) || v.GetAdjacentVertices().ContainsKey(tagU)) {
+            if (!TryGetEdge(tagV, tagU, out v, out u) || v.GetAdjacentVertices().ContainsKey(tagU)) {
                 return false;
             }
             v.GetAdjacentVertices().Add(tagU, u);
@@ -345,13 +353,18 @@ public class generateLabyrinth : MonoBehaviour
 
         public bool Disconnect(string tagV, string tagU) {
             Vertex v, u;
-            if (!vertices.TryGetValue(tagV, out v) || !vertices.TryGetValue(tagU, out u) || !v.GetAdjacentVertices().ContainsKey(tagU)) {
+            if (!TryGetEdge(tagV, tagU, out v, out u) || !v.GetAdjacentVertices().ContainsKey(tagU)) {
                 return false;
             }
             v.GetAdjacentVertices().Remove(tagU);
             u.GetAdjacentVertices().Remove(tagV);
             edgesCount--;
             return true;
+        }
+
+        private bool TryGetEdge(string tagV, string tagU, out Vertex v, out Vertex u) {
+            u = new Vertex("");
+            return vertices.TryGetValue(tagV, out v) && vertices.TryGetValue(tagU, out u);
         }
 
         private class Vertex
