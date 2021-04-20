@@ -12,7 +12,7 @@ public class RandomMovement : MonoBehaviour
     private int timeToNextMovementChange;
     
     private int timeNoMovement;
-    Impfung meineImpfung;
+    Impfbar meineImpfung;
     static Transform playerTransformation;
     void Start()
     {
@@ -20,7 +20,7 @@ public class RandomMovement : MonoBehaviour
         timeNoMovement=0;
         var player = GameObject.FindGameObjectWithTag("Player");
         playerTransformation=player.transform;
-        meineImpfung=gameObject.GetComponent<Impfung>();
+        meineImpfung=gameObject.GetComponent<Impfbar>();
     }
     void setRandomMovement()
     {

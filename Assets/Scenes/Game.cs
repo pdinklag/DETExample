@@ -19,10 +19,10 @@ public class Game : MonoBehaviour
     public Transform SpawnPoint;
 
     ///allNormalos
-    public Normalo[] normalos;
+    public Impfbar[] impfbare;
 
     ///zeigt auf erstes freies Feld vom Array normalos
-    private int zeigerNormols;
+    private int zeigerImpfbare;
     private void Awake()
     {
         // there can be only one...
@@ -39,8 +39,8 @@ public class Game : MonoBehaviour
         }
 
         
-        normalos=new Normalo[GameSettings.anzahlNormalos()];
-        zeigerNormols=0;
+        impfbare=new Impfbar[GameSettings.anzahlImpfbare()];
+        zeigerImpfbare=0;
         // load settings
         Settings = GameSettings.Load();
     }
@@ -52,8 +52,14 @@ public class Game : MonoBehaviour
 
     private void FixedUpdate(){
 
-        foreach (Normalo n1 in normalos) {
-            
+        foreach (Impfbar i1 in impfbare) {
+            if(i1.infiziert)
+            {
+                foreach(Impfbar i2 in impfbare)
+                {
+                    i2.moeglicheInfektion(i1);
+                }
+            }
         }
     }
 
@@ -66,9 +72,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void addNormalo(Normalo normalo)
+    public void addImpfbar(Impfbar impfbar)
     {
-        normalos[zeigerNormols]=normalo;
-        zeigerNormols++;
+        impfbare[zeigerImpfbare]=impfbar;
+        zeigerImpfbare++;
     } 
 }

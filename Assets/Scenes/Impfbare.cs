@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Impfung : MonoBehaviour
+public class Impfbare : MonoBehaviour
 {
     public Renderer renderer;
 
@@ -11,7 +11,7 @@ public class Impfung : MonoBehaviour
     
     public bool Impfgegner=false;
 
-    public boolean infiziert=false;
+    public bool infiziert=false;
     public bool wuetend=false;
 
     private static Color colorImpfgegner=Color.yellow;
