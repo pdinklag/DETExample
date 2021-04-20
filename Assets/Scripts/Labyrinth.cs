@@ -4,8 +4,9 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class generateLabyrinth : MonoBehaviour
+public class Labyrinth : ScriptableObject
 {
+    public static Labyrinth Instance { get; private set; }
     private int size;
     private int cellSize;
     private float wallThickness;
@@ -14,9 +15,14 @@ public class generateLabyrinth : MonoBehaviour
     private LabyrinthGraph labyrinth;
     private Cell[][] cells;
     public Vector2 startPos {get; private set;}
+    
+    public Labyrinth(GameSettings gameSettings) {
+        if (Instance) {
+            return;
+        } else {
+            Instance = this;
+        }
 
-    void Start(GameSettings gameSettings)
-    {
         size = gameSettings.size;
         cellSize = gameSettings.cellSize;
         wallThickness = gameSettings.wallThickness;
@@ -24,6 +30,8 @@ public class generateLabyrinth : MonoBehaviour
 
         labyrinthWallPrefab = GameObject.FindWithTag("labyrinthWallPrefab");
     }
+
+    void Start() {}
 
     Vector4 GetPosAndSizeOfWall(Wall wall) {
         Cell cell1 = wall.GetCell1();

@@ -45,6 +45,7 @@ public class Game : MonoBehaviour
         zeigerImpfbare=0;
         
         Labyrinth labyrinth = new Labyrinth(Settings);
+        labyrinth.Generate();
     }
 
     private void Start()
