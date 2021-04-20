@@ -14,6 +14,8 @@ public class generateLabyrinth : MonoBehaviour
     private int cellSize;
     private float wallThickness;
     private int pathLengthRelativeToSize;
+    private UndirectedGraph labyrinth;
+    private Cell[][] cells;
 
     void Start()
     {
@@ -115,7 +117,7 @@ public class generateLabyrinth : MonoBehaviour
         }
 
         // create a graph where vertices are cells and edges are removed walls
-        UndirectedGraph labyrinth = new UndirectedGraph();
+        labyrinth = new UndirectedGraph();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 labyrinth.AddVertex(cells[i][j].GetTag());
@@ -140,7 +142,6 @@ public class generateLabyrinth : MonoBehaviour
 
         // get pair of outer cells with path deviating the least from the wanted path length
         List<Tuple<Cell,Cell>> bestCellPairs = new List<Tuple<Cell,Cell>>();
-        bestCellPairs.Add(new Tuple<Cell, Cell>(new Cell(0, 0), new Cell(0, 0)));
         int wantedPathLength = pathLengthRelativeToSize*size;
         int minimumDeviation = size*size;
         // consider each outer cell as entrance
@@ -249,6 +250,27 @@ public class generateLabyrinth : MonoBehaviour
         return distance.ToList();
     }
 
+    // calculates the next cell on the way from one cell to another (in a labyrinth there is only one way from one cell to another)
+    public Vector2 nextPosToMoveToOnWayFromTo(Vector2 from, Vector2 to) {
+        from /= cellSize;
+        to /= cellSize;
+
+        string tagFrom = cells[(int) from.x][(int) from.y].GetTag();
+        string tagTo = cells[(int) to.x][(int) to.y].GetTag();
+
+        string tagNext = labyrinth.nextVertexOnWayFromTo(tagFrom, tagTo);
+
+        int x, y;
+        Cell.GetPosFromTag(tagNext, out x, out y);
+        
+        return GetRandomPosInArea(x, y, cellSize, cellSize);
+    }
+
+    public Vector2 GetRandomPosInArea(int x, int y, int w, int h) {
+        System.Random rand = new System.Random();
+        return new Vector2(x - w/2 + (float) rand.NextDouble() * w, y - h/2 + (float) rand.NextDouble() * h);
+    }
+
     private class Cell
     {
         private int posX;
@@ -279,6 +301,10 @@ public class generateLabyrinth : MonoBehaviour
             string[] indices = tag.Split(',');
             x = Convert.ToInt32(indices[0]);
             y = Convert.ToInt32(indices[1]);
+        }
+
+        public static string GetTagFromPos(int x, int y) {
+            return x.ToString() + "," + y.ToString();
         }
 
         public Vector2 GetCenterPosition(int cellSize) {
@@ -349,38 +375,93 @@ public class generateLabyrinth : MonoBehaviour
             return true;
         }
 
+        private List<Vertex> GetAdjacentVertices(Vertex v) {
+            return v.GetAdjacentVertices().Values.ToList();
+        }
+
         public List<string> GetVertices() {
             return vertices.Keys.ToList();
         }
 
         public bool AreConnected(string tagV, string tagU) {
             Vertex v, u;
-            return TryGetEdge(tagV, tagU, out v, out u) && v.GetAdjacentVertices().ContainsKey(tagU);
+            return TryGetBoth(tagV, tagU, out v, out u) && AreConnected(v, u);
+        }
+
+        private bool AreConnected(Vertex v, Vertex u) {
+            return v.GetAdjacentVertices().ContainsKey(u.GetTag());
         }
 
         public bool Connect(string tagV, string tagU) {
             Vertex v, u;
-            if (!TryGetEdge(tagV, tagU, out v, out u) || v.GetAdjacentVertices().ContainsKey(tagU)) {
+            if (!TryGetBoth(tagV, tagU, out v, out u) || v.GetAdjacentVertices().ContainsKey(tagU)) {
                 return false;
             }
-            v.GetAdjacentVertices().Add(tagU, u);
-            u.GetAdjacentVertices().Add(tagV, v);
-            edgesCount++;
+            Connect(v, u);
             return true;
+        }
+
+        private void Connect(Vertex v, Vertex u) {
+            v.GetAdjacentVertices().Add(u.GetTag(), u);
+            u.GetAdjacentVertices().Add(u.GetTag(), v);
+            edgesCount++;
         }
 
         public bool Disconnect(string tagV, string tagU) {
             Vertex v, u;
-            if (!TryGetEdge(tagV, tagU, out v, out u) || !v.GetAdjacentVertices().ContainsKey(tagU)) {
+            if (!TryGetBoth(tagV, tagU, out v, out u) || !v.GetAdjacentVertices().ContainsKey(tagU)) {
                 return false;
             }
-            v.GetAdjacentVertices().Remove(tagU);
-            u.GetAdjacentVertices().Remove(tagV);
-            edgesCount--;
+            Disconnect(v, u);
             return true;
         }
 
-        private bool TryGetEdge(string tagV, string tagU, out Vertex v, out Vertex u) {
+        private void Disconnect(Vertex v, Vertex u) {
+            v.GetAdjacentVertices().Remove(u.GetTag());
+            u.GetAdjacentVertices().Remove(v.GetTag());
+            edgesCount--;
+        }
+
+        public bool ExistsWayFromTo(string tagV, string tagU) {
+            Vertex v, u;
+            return TryGetBoth(tagV, tagU, out v, out u) && ExistsWayFromTo(v, u);
+        }
+
+        private bool ExistsWayFromTo(Vertex v, Vertex u) {
+            if (AreConnected(v, u)) {
+                return true;
+            }
+            foreach (Vertex w in GetAdjacentVertices(v)) {
+                Disconnect(v, w);
+                if (ExistsWayFromTo(w, u)) {
+                    return true;
+                }
+                Connect(v, w);
+            }
+            return false;
+        }
+
+        public string nextVertexOnWayFromTo(string tagFrom, string tagTo) {
+            Vertex from, to;
+
+            TryGetBoth(tagFrom, tagTo, out from, out to);
+            List<Vertex> candidates = GetAdjacentVertices(from);
+
+            foreach (Vertex candidate in candidates) {
+                Disconnect(from, candidate);
+                if (ExistsWayFromTo(candidate, to)) {
+                    int x, y;
+                    Cell.GetPosFromTag(candidate.GetTag(), out x, out y);
+                    return Cell.GetTagFromPos(x, y);
+                }
+                Connect(from, candidate);
+            }
+
+            Debug.Log("no next Cell found");
+            return "";
+        }
+
+        private bool TryGetBoth(string tagV, string tagU, out Vertex v, out Vertex u) {
             u = new Vertex("");
             return vertices.TryGetValue(tagV, out v) && vertices.TryGetValue(tagU, out u);
         }
