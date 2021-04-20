@@ -291,7 +291,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -1420426646413924372, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
 --- !u!1001 &1171461039
 PrefabInstance:
@@ -348,7 +349,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -1420426646413924372, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
 --- !u!1 &1270578521
 GameObject:
@@ -586,8 +588,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8032435495861994261, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
+      propertyPath: infiziert
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -1420426646413924372, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
+--- !u!1 &1685311695 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3594856947559247413, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
+  m_PrefabInstance: {fileID: 1400621095}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1685311696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685311695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a84842a475fd93547b3867ab7eabe7f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 1685311700}
+  distanceInfizierung: 10
+  geimpft: 0
+  Impfgegner: 0
+  infiziert: 1
+  wuetend: 0
+--- !u!212 &1685311700 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3594856947559247414, guid: fa2be7038ad68ea4382d1293cafd2c66, type: 3}
+  m_PrefabInstance: {fileID: 1400621095}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2054620222
 GameObject:
   m_ObjectHideFlags: 0
