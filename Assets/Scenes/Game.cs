@@ -39,10 +39,11 @@ public class Game : MonoBehaviour
         }
 
         
-        impfbare=new Impfbar[GameSettings.anzahlImpfbare()];
-        zeigerImpfbare=0;
         // load settings
         Settings = GameSettings.Load();
+        impfbare=new Impfbar[Settings.getNumberOfImpfbare()];
+        zeigerImpfbare=0;
+        
     }
 
     private void Start()

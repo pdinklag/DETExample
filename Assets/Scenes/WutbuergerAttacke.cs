@@ -38,7 +38,7 @@ public class WutbuergerAttacke : MonoBehaviour
         {
             return false;
         }
-        Impfung impfungDesAnderen=other.GetComponent<Impfung>();
+        Impfbar impfungDesAnderen=other.GetComponent<Impfbar>();
         return impfungDesAnderen.wuetend;
     }
 }

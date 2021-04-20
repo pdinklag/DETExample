@@ -36,7 +36,7 @@ public class GameSettings : ScriptableObject
     [Tooltip("number of Impfgegner spawning per attack")]
     public float numberOfImpfgegnerPerAttack;
 
-    public int getNumberOfNormalos() {
+    public int getNumberOfImpfbare() {
         return (int) (((float) size * size) * personDensity);
     }
 }
