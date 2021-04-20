@@ -6,17 +6,23 @@ using System.Linq;
 
 public class generateLabyrinth : MonoBehaviour
 {
-    public int size;
-    public int cellSize;
-    public int pathLengthRelativeToSize;
-    public float wallThickness;
     public GameObject labyrinthWallPrefab;
     public GameObject cam;
     public Vector3 startPosition;
-    private bool[] isWallDeleted;
+    private GameSettings gs;
+    private int size;
+    private int cellSize;
+    private float wallThickness;
+    private int pathLengthRelativeToSize;
 
     void Start()
     {
+        gs = GameSettings.FindObjectOfType<GameSettings>();
+        size = gs.size;
+        cellSize = gs.cellSize;
+        wallThickness = gs.wallThickness;
+        pathLengthRelativeToSize = gs.pathLengthRelativeToSize;
+
         Generate();
     }
 
