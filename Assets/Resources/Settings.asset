@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 535837299abe37c45b9d69206c6e7f14, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  PlayerSpeed: 3
+  moveSpeed: 3
+  size: 10
+  cellSize: 6
+  pathLengthRelativeToSize: 4
+  wallThickness: 0.2
+  personDensity: 0.3
+  probInfected: 0.1
+  numberOfImpfgegnerPerAttack: 10
