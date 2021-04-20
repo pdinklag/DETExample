@@ -6,26 +6,23 @@ using System.Linq;
 
 public class generateLabyrinth : MonoBehaviour
 {
-    public GameObject labyrinthWallPrefab;
-    public GameObject cam;
-    public Vector3 startPosition;
-    private GameSettings gs;
     private int size;
     private int cellSize;
     private float wallThickness;
     private int pathLengthRelativeToSize;
-    private UndirectedGraph labyrinth;
+    private GameObject labyrinthWallPrefab;
+    private LabyrinthGraph labyrinth;
     private Cell[][] cells;
+    public Vector2 startPos {get; private set;}
 
-    void Start()
+    void Start(GameSettings gameSettings)
     {
-        gs = GameSettings.FindObjectOfType<GameSettings>();
-        size = gs.size;
-        cellSize = gs.cellSize;
-        wallThickness = gs.wallThickness;
-        pathLengthRelativeToSize = gs.pathLengthRelativeToSize;
+        size = gameSettings.size;
+        cellSize = gameSettings.cellSize;
+        wallThickness = gameSettings.wallThickness;
+        pathLengthRelativeToSize = gameSettings.pathLengthRelativeToSize;
 
-        Generate();
+        labyrinthWallPrefab = GameObject.FindWithTag("labyrinthWallPrefab");
     }
 
     Vector4 GetPosAndSizeOfWall(Wall wall) {
@@ -50,13 +47,13 @@ public class generateLabyrinth : MonoBehaviour
         }
     }
 
-    void GenerateRectangle(float posX, float posY, float sizeX, float sizeY) {
+    private void GenerateRectangle(float posX, float posY, float sizeX, float sizeY) {
         GameObject wall = Instantiate(labyrinthWallPrefab, new Vector2(posX, posY), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
         Rigidbody2D rb = wall.GetComponent<Rigidbody2D>();
         wall.transform.localScale = new Vector2(sizeX, sizeY);
     }
 
-    private void Generate()
+    public void Generate()
     {
         Cell[][] cells = new Cell[size][];
         List<Wall> walls = new List<Wall>();
@@ -117,7 +114,7 @@ public class generateLabyrinth : MonoBehaviour
         }
 
         // create a graph where vertices are cells and edges are removed walls
-        labyrinth = new UndirectedGraph();
+        labyrinth = new LabyrinthGraph();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 labyrinth.AddVertex(cells[i][j].GetTag());
@@ -207,12 +204,12 @@ public class generateLabyrinth : MonoBehaviour
             GenerateRectangle(posAndSize.x, posAndSize.y, posAndSize.z, posAndSize.w);
         }
 
-        startPosition = cellEntrance.GetCenterPosition(cellSize);
-        gameObject.transform.position = startPosition;
-        cam.transform.position = startPosition + new Vector3(0.0f, 0.0f, -1.0f);
+        startPos = cellEntrance.GetCenterPosition(cellSize);
+        GameObject.FindWithTag("Player").transform.position = startPos;
+        GameObject.FindWithTag("MainCamera").transform.position = (Vector3) startPos + new Vector3(0.0f, 0.0f, -1.0f);
     }
 
-    private List<KeyValuePair<string, int>> CalculatePathLengths(UndirectedGraph graph, string tagFrom) {
+    private List<KeyValuePair<string, int>> CalculatePathLengths(LabyrinthGraph graph, string tagFrom) {
         Dictionary<string, int> distance = new Dictionary<string, int>(graph.GetNumberOfVertices());
         HashSet<string> visited = new HashSet<string>();
         HashSet<string> visiting = new HashSet<string>();
@@ -334,12 +331,12 @@ public class generateLabyrinth : MonoBehaviour
             return cell2;
         }
     }
-    private class UndirectedGraph
+    private class LabyrinthGraph
     {
         private Dictionary<string,Vertex> vertices = new Dictionary<string,Vertex>();
         private int verticesCount = 0;
         private int edgesCount = 0;
-        public UndirectedGraph() {}
+        public LabyrinthGraph() {}
 
         public int GetNumberOfVertices() {
             return verticesCount;

@@ -44,6 +44,7 @@ public class Game : MonoBehaviour
         impfbare=new Impfbar[Settings.getNumberOfImpfbare()];
         zeigerImpfbare=0;
         
+        Labyrinth labyrinth = new Labyrinth(Settings);
     }
 
     private void Start()
