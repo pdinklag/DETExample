@@ -273,13 +273,15 @@ public class Labyrinth : ScriptableObject
 
         string tagNext = labyrinth.nextVertexOnWayFromTo(tagFrom, tagTo);
 
+        Debug.Log(tagNext);
+
         int x, y;
         Cell.GetPosFromTag(tagNext, out x, out y);
         
-        return GetRandomPosInArea(x, y, cellSize, cellSize);
+        return GetRandomPosInArea((float) (x + 0.5) * cellSize, (float) (y + 0.5) * cellSize, cellSize - 2 * wallThickness, cellSize - 2 * wallThickness);
     }
 
-    public Vector2 GetRandomPosInArea(int x, int y, int w, int h) {
+    public Vector2 GetRandomPosInArea(float x, float y, float w, float h) {
         System.Random rand = new System.Random();
         return new Vector2(x - w/2 + (float) rand.NextDouble() * w, y - h/2 + (float) rand.NextDouble() * h);
     }
@@ -447,6 +449,7 @@ public class Labyrinth : ScriptableObject
             foreach (Vertex w in GetAdjacentVertices(v)) {
                 Disconnect(v, w);
                 if (ExistsWayFromTo(w, u)) {
+                    Connect(v, w);
                     return true;
                 }
                 Connect(v, w);
@@ -465,13 +468,14 @@ public class Labyrinth : ScriptableObject
                 if (ExistsWayFromTo(candidate, to)) {
                     int x, y;
                     Cell.GetPosFromTag(candidate.GetTag(), out x, out y);
+                    Connect(from, candidate);
                     return Cell.GetTagFromPos(x, y);
                 }
                 Connect(from, candidate);
             }
 
             Debug.Log("no next Cell found");
-            return "";
+            return "0,0";
         }
 
         private bool TryGetBoth(string tagV, string tagU, out Vertex v, out Vertex u) {

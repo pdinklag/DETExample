@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        if (Input.anyKeyDown) {
+        if (Input.GetKeyDown("space")) {
             Vector2 playerPos = gameObject.transform.position;
             Vector2 exitPos = Labyrinth.Instance.exitPos;
 

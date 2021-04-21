@@ -57,7 +57,7 @@ public class Game : MonoBehaviour
     private void FixedUpdate(){
 
         foreach (Impfbar i1 in impfbare) {
-            if(i1.infiziert)
+            if( i1 != null && i1.infiziert)
             {
                 foreach(Impfbar i2 in impfbare)
                 {
