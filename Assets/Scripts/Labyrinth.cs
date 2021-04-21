@@ -260,6 +260,10 @@ public class Labyrinth : ScriptableObject
         return distance.ToList();
     }
 
+    public Vector2 GetPosOfCell(int x, int y) {
+        return cells[x][y].GetCenterPosition(cellSize);
+    }
+
     // calculates the next cell on the way from one cell to another (in a labyrinth there is only one way from one cell to another)
     public Vector2 nextPosToMoveToOnWayFromTo(Vector2 from, Vector2 to) {
         from /= cellSize;
@@ -267,13 +271,13 @@ public class Labyrinth : ScriptableObject
 
         string tagFrom = cells[(int) from.x][(int) from.y].GetTag();
         string tagTo = cells[(int) to.x][(int) to.y].GetTag();
+        string tagNext;
 
-        Debug.Log(tagFrom);
-        Debug.Log(tagTo);
-
-        string tagNext = labyrinth.nextVertexOnWayFromTo(tagFrom, tagTo);
-
-        Debug.Log(tagNext);
+        if (tagFrom == tagTo) {
+            tagNext = tagFrom;
+        } else {
+            tagNext = labyrinth.nextVertexOnWayFromTo(tagFrom, tagTo);
+        }
 
         int x, y;
         Cell.GetPosFromTag(tagNext, out x, out y);
@@ -464,6 +468,9 @@ public class Labyrinth : ScriptableObject
             List<Vertex> candidates = GetAdjacentVertices(from);
 
             foreach (Vertex candidate in candidates) {
+                if (candidate.GetTag() == tagTo) {
+                    return tagTo;
+                }
                 Disconnect(from, candidate);
                 if (ExistsWayFromTo(candidate, to)) {
                     int x, y;

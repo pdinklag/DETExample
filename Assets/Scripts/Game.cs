@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Game : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Game : MonoBehaviour
     /// The singleton instance.
     /// </summary>
     public static Game Instance { get; private set; }
+    private GameObject normaloPrefab;
 
 
     /// <summary>
@@ -47,6 +49,22 @@ public class Game : MonoBehaviour
         Labyrinth labyrinth = ScriptableObject.CreateInstance<Labyrinth>();
         labyrinth.SetSettings(Settings);
         labyrinth.Generate();
+
+        System.Random rand = new System.Random();
+
+        normaloPrefab = AssetDatabase.LoadAssetAtPath("Assets/Scenes/Normalo.prefab", typeof(GameObject)) as GameObject;
+
+        for (int i = 0; i<Settings.size; i++) {
+            for (int j = 0; j<Settings.size; j++) {
+                if (rand.NextDouble() <= Settings.personDensity) {
+                    GameObject normalo = Instantiate(normaloPrefab, labyrinth.GetPosOfCell(i, j), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+                    if (rand.NextDouble() <= Settings.probInfected) {
+                        normalo.GetComponent<Impfbar>().infiziert = true;
+                    }
+                }
+            }
+        }
+        
     }
 
     private void Start()
@@ -54,17 +72,8 @@ public class Game : MonoBehaviour
         //???
     }
 
-    private void FixedUpdate(){
+    private void FixedUpdate() {
 
-        foreach (Impfbar i1 in impfbare) {
-            if( i1 != null && i1.infiziert)
-            {
-                foreach(Impfbar i2 in impfbare)
-                {
-                    i2.moeglicheInfektion(i1);
-                }
-            }
-        }
     }
 
     void OnDestroy()
