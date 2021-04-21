@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor;
 
 public class Labyrinth : ScriptableObject
 {
@@ -16,22 +17,22 @@ public class Labyrinth : ScriptableObject
     private Cell[][] cells;
     public Vector2 startPos {get; private set;}
     
-    public Labyrinth(GameSettings gameSettings) {
-        if (Instance) {
+    public void Awake() {
+        if (Instance != null) {
             return;
         } else {
             Instance = this;
         }
+    }
 
+    public void SetSettings(GameSettings gameSettings) {
         size = gameSettings.size;
         cellSize = gameSettings.cellSize;
         wallThickness = gameSettings.wallThickness;
         pathLengthRelativeToSize = gameSettings.pathLengthRelativeToSize;
 
-        labyrinthWallPrefab = GameObject.FindWithTag("labyrinthWallPrefab");
+        labyrinthWallPrefab = AssetDatabase.LoadAssetAtPath("Assets/labyrinthWall.prefab", typeof(GameObject)) as GameObject;
     }
-
-    void Start() {}
 
     Vector4 GetPosAndSizeOfWall(Wall wall) {
         Cell cell1 = wall.GetCell1();
@@ -63,7 +64,7 @@ public class Labyrinth : ScriptableObject
 
     public void Generate()
     {
-        Cell[][] cells = new Cell[size][];
+        cells = new Cell[size][];
         List<Wall> walls = new List<Wall>();
 
         // add cells
@@ -408,7 +409,7 @@ public class Labyrinth : ScriptableObject
 
         private void Connect(Vertex v, Vertex u) {
             v.GetAdjacentVertices().Add(u.GetTag(), u);
-            u.GetAdjacentVertices().Add(u.GetTag(), v);
+            u.GetAdjacentVertices().Add(v.GetTag(), v);
             edgesCount++;
         }
 

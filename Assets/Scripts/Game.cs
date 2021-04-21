@@ -44,7 +44,8 @@ public class Game : MonoBehaviour
         impfbare=new Impfbar[Settings.getNumberOfImpfbare()];
         zeigerImpfbare=0;
         
-        Labyrinth labyrinth = new Labyrinth(Settings);
+        Labyrinth labyrinth = ScriptableObject.CreateInstance<Labyrinth>();
+        labyrinth.SetSettings(Settings);
         labyrinth.Generate();
     }
 
