@@ -65,8 +65,8 @@ public class RandomMovement : MonoBehaviour
                     timeToNextMovementChange--;
                 }
             }
-        Move();
         }
+        Move();
     }
     void Move() {
         rigidbody.velocity = new Vector2(moveDirection.x, moveDirection.y).normalized * moveSpeed;
