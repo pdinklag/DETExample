@@ -8,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public Camera cam;
     private Vector2 moveDirection;
     private Vector2 mousePos;
-
+    public int leben;
     // Update is called once per frame
     void Start(){
+        leben=100;
     }
     void Update() {
         processInputs();
@@ -40,5 +41,35 @@ public class PlayerMovement : MonoBehaviour
         Vector2 lookDir = mousePos - rigidbody.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         rigidbody.rotation = angle;
+    }
+    void OnTriggerEnter2D(Collider2D other) { 
+         Debug.Log("Triggered");
+        if(Schlagstock(other.gameObject))
+        {
+            leben-=10;
+            if(leben==0)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                    Vector3 positionPlayer=transform.position;
+                    Vector3 positionOther=other.gameObject.transform.position;
+                    Vector3 flug=(positionPlayer-positionOther);
+                    rigidbody.MovePosition(rigidbody.position+new Vector2(flug.x,flug.y));
+            }
+        } 
+    }
+    void OnCollisionEnter2D(Collision2D collision) {
+        Debug.Log("Beruehrt");
+    }
+    bool Schlagstock(GameObject other)
+    {
+        if(!other.CompareTag("WaffeGegner"))
+        {
+            return false;
+        }
+        Schlagstock schlagstock=other.GetComponent<Schlagstock>();
+        return schlagstock!=null;
     }
 }

@@ -31,6 +31,10 @@ public class RandomMovement : MonoBehaviour
     }
     void setMovementToPlayer()
     {
+        if(playerTransformation==null)
+        {
+            return;
+        }
         Vector3 positionPlayer=playerTransformation.position;
         Vector3 position=gameObject.transform.position;
         moveDirection.x=positionPlayer.x-position.x;

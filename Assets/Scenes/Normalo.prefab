@@ -161,8 +161,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderer: {fileID: 3594856947559247414}
+  SchlagstockPrefab: {fileID: 8675090139199223013, guid: 039cd5deb6e285842aa0c8b1fbc373d5, type: 3}
+  rigidbody: {fileID: 3594856947559247415}
   distanceInfizierung: 10
   geimpft: 0
-  Impfgegner: 0
+  Impfgegner: 1
   infiziert: 0
   wuetend: 0

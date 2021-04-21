@@ -6,6 +6,9 @@ public class Impfbar : MonoBehaviour
 {
     public Renderer renderer;
 
+    public GameObject SchlagstockPrefab;
+
+    public Rigidbody2D rigidbody;
     public int distanceInfizierung=50;
     public bool geimpft = false;
     
@@ -74,13 +77,14 @@ public class Impfbar : MonoBehaviour
         if(other.CompareTag("Bullet"))
         {
             bullet bullet=other.GetComponent<bullet>();
-            if(bullet.typ==0)
+            if(bullet.typ==0&&!geimpft)
             {
                 geimpft=true;
                 infiziert=false;
                 if(Impfgegner)
                 {
                     wuetend=true;
+                    addSchlagstock();
                 }
                 setColor();
             }
@@ -109,7 +113,7 @@ public class Impfbar : MonoBehaviour
         Vector3 position=gameObject.transform.position;
         Vector3 abstandsvector=positionOther-position;
         int abstand=(int)abstandsvector.magnitude;
-        Debug.Log(abstand);
+        //Debug.Log(abstand);
         if(abstand<=distanceInfizierung)
         {
             
@@ -121,5 +125,21 @@ public class Impfbar : MonoBehaviour
     {
         infiziert=true;
         setColor();
+    }
+    private void addSchlagstock()
+    {
+        Vector3 positionSpawn=gameObject.transform.position;
+        positionSpawn.x-=0.6f;
+         GameObject schlagstock = Instantiate(SchlagstockPrefab,positionSpawn , gameObject.transform.rotation);
+        if(schlagstock==null)
+        {
+            Debug.Log("No schlagstock");
+        }
+         Schlagstock script=schlagstock.GetComponent<Schlagstock>();
+         if(script==null)
+         {
+             Debug.Log("No script");
+         }
+         script.userRigidbody=rigidbody;
     }
 }
