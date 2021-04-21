@@ -33,6 +33,13 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = new Vector2(moveX, moveY);
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+
+        if (Input.anyKeyDown) {
+            Vector2 playerPos = gameObject.transform.position;
+            Vector2 exitPos = Labyrinth.Instance.exitPos;
+
+            gameObject.transform.position = Labyrinth.Instance.nextPosToMoveToOnWayFromTo(playerPos, exitPos);
+        }
     }
 
     void Move() {

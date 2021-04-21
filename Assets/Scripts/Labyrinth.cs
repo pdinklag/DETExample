@@ -16,6 +16,8 @@ public class Labyrinth : ScriptableObject
     private LabyrinthGraph labyrinth;
     private Cell[][] cells;
     public Vector2 startPos {get; private set;}
+
+    public Vector2 exitPos {get; private set;}
     
     public void Awake() {
         if (Instance != null) {
@@ -23,6 +25,8 @@ public class Labyrinth : ScriptableObject
         } else {
             Instance = this;
         }
+
+        labyrinthWallPrefab = AssetDatabase.LoadAssetAtPath("Assets/labyrinthWall.prefab", typeof(GameObject)) as GameObject;
     }
 
     public void SetSettings(GameSettings gameSettings) {
@@ -30,8 +34,6 @@ public class Labyrinth : ScriptableObject
         cellSize = gameSettings.cellSize;
         wallThickness = gameSettings.wallThickness;
         pathLengthRelativeToSize = gameSettings.pathLengthRelativeToSize;
-
-        labyrinthWallPrefab = AssetDatabase.LoadAssetAtPath("Assets/labyrinthWall.prefab", typeof(GameObject)) as GameObject;
     }
 
     Vector4 GetPosAndSizeOfWall(Wall wall) {
@@ -182,6 +184,8 @@ public class Labyrinth : ScriptableObject
         Cell cellEntrance = bestCellPair.Item1;
         Cell cellExit = bestCellPair.Item2;
 
+        exitPos = cellExit.GetCenterPosition(cellSize);
+
         // add outer walls and save entrance and exit
         List<Wall> entranceAndExit = new List<Wall>();
         foreach (Cell cell in outerCells) {
@@ -263,6 +267,9 @@ public class Labyrinth : ScriptableObject
 
         string tagFrom = cells[(int) from.x][(int) from.y].GetTag();
         string tagTo = cells[(int) to.x][(int) to.y].GetTag();
+
+        Debug.Log(tagFrom);
+        Debug.Log(tagTo);
 
         string tagNext = labyrinth.nextVertexOnWayFromTo(tagFrom, tagTo);
 
