@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.rotation = angle;
     }
     void OnTriggerEnter2D(Collider2D other) { 
-         Debug.Log("Triggered");
+       
         if(Schlagstock(other.gameObject))
         {
             leben-=10;
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         } 
     }
     void OnCollisionEnter2D(Collision2D collision) {
-        Debug.Log("Beruehrt");
+        
     }
     bool Schlagstock(GameObject other)
     {

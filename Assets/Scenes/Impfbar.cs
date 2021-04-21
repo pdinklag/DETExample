@@ -11,11 +11,14 @@ public class Impfbar : MonoBehaviour
     public Rigidbody2D rigidbody;
     public int distanceInfizierung=50;
     public bool geimpft = false;
-    
+
+    public bool politiker=false;  
     public bool Impfgegner=false;
 
     public bool infiziert=false;
     public bool wuetend=false;
+
+    public int koBulletsFromPolitics=10;
 
     private static Color colorImpfgegner=new Color(1f, 0.92f, 0.016f, 1f);
 
@@ -26,9 +29,13 @@ public class Impfbar : MonoBehaviour
     private Color colorGeheilt=Color.blue;
 
     private Color colorNormal=new Color(0f,1f,0f,1f);
+
+    private static Player player;
     // Start is called before the first frame update
     void Start()
     {
+        var playerObject = GameObject.FindGameObjectWithTag("Player");
+        player=gameObject.GetComponent<Player>();
          System.Random random=new System.Random();
         if(random.Next(10)<=1)
         {
@@ -37,6 +44,10 @@ public class Impfbar : MonoBehaviour
         if(random.Next(10)<=1)
         {
             infiziert=true;
+        }
+        if(random.Next(10)<=1)
+        {
+            politiker=true;
         }
        setColor();
     }
@@ -77,16 +88,23 @@ public class Impfbar : MonoBehaviour
         if(other.CompareTag("Bullet"))
         {
             bullet bullet=other.GetComponent<bullet>();
-            if(bullet.typ==0&&!geimpft)
+            if(bullet.typ==0)
             {
-                geimpft=true;
-                infiziert=false;
-                if(Impfgegner)
+                if(!geimpft)
                 {
-                    wuetend=true;
-                    addSchlagstock();
+                    geimpft=true;
+                    infiziert=false;
+                    if(Impfgegner)
+                    {
+                        wuetend=true;
+                        addSchlagstock();
+                    }
+                    else if(politiker)
+                    {
+                        player.addKOBullets(koBulletsFromPolitics);
+                    }
+                    setColor();
                 }
-                setColor();
             }
             else
             {
