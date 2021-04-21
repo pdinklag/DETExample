@@ -8,6 +8,10 @@ public class Impfbar : MonoBehaviour
 
     public GameObject SchlagstockPrefab;
 
+    public GameObject virusPrefab;
+
+    public float virusForce = 10f;
+
     public Rigidbody2D rigidbody;
     public int distanceInfizierung=50;
     public bool geimpft = false;
@@ -20,6 +24,10 @@ public class Impfbar : MonoBehaviour
 
     public int koBulletsFromPolitics=10;
 
+    public int timeBetweenHusten=5;
+
+    private int timeToNextHusten=0;
+    
     private static Color colorImpfgegner=new Color(1f, 0.92f, 0.016f, 1f);
 
     private static Color colorInfiziert=Color.red;
@@ -82,7 +90,10 @@ public class Impfbar : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        if(infiziert)
+        {
+            hustenOptional();
+        }
     }
     void OnTriggerEnter2D(Collider2D other) { 
         if(other.CompareTag("Bullet"))
@@ -110,7 +121,8 @@ public class Impfbar : MonoBehaviour
             {
                 ruhigStellen(100);   
             }
-        } 
+        }
+
     }
     public void ruhigStellen(int dauer)
     {
@@ -159,5 +171,27 @@ public class Impfbar : MonoBehaviour
              Debug.Log("No script");
          }
          script.userRigidbody=rigidbody;
+    }
+    void hustenOptional()
+    {
+        if(timeToNextHusten>0)
+        {
+            timeToNextHusten--;
+        }
+        else
+        {
+            husten();
+            timeToNextHusten=timeBetweenHusten;
+        }
+    }
+    void husten()
+    {
+        if(virusPrefab==null)
+        {
+            Debug.Log("No Virus Prefab");
+        }
+         GameObject virus = Instantiate(virusPrefab, gameObject.transform.position, gameObject.transform.rotation);
+        Rigidbody2D rb = virus.GetComponent<Rigidbody2D>();
+        rb.AddForce(gameObject.transform.up * virusForce, ForceMode2D.Impulse);
     }
 }

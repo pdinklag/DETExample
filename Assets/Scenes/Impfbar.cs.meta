@@ -3,7 +3,11 @@ guid: a84842a475fd93547b3867ab7eabe7f0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - renderer: {instanceID: 0}
+  - SchlagstockPrefab: {fileID: 8675090139199223013, guid: 039cd5deb6e285842aa0c8b1fbc373d5, type: 3}
+  - virusPrefab: {fileID: 4844777928976371399, guid: 63deecaffb4811a4498b1f590bc5d7f7, type: 3}
+  - rigidbody: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
