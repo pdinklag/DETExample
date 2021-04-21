@@ -21,6 +21,7 @@ public class RandomMovement : MonoBehaviour
         var player = GameObject.FindGameObjectWithTag("Player");
         playerTransformation=player.transform;
         meineImpfung=gameObject.GetComponent<Impfbar>();
+        moveDirection=new Vector2(0,0);
     }
     void setRandomMovement()
     {
@@ -50,6 +51,10 @@ public class RandomMovement : MonoBehaviour
         }
         else
         {
+            if(meineImpfung.politiker)
+            {
+                return;
+            }
             if(meineImpfung.wuetend)
             {
             setMovementToPlayer();
