@@ -16,9 +16,6 @@ public class GameSettings : ScriptableObject
     [Tooltip("The player prefab.")]
     public PlayerCharacter PlayerPrefab;
 
-    [Tooltip("The player's movement speed.")]
-    public float PlayerSpeed = 3.0f;
-
     [Header("Weapons")]
     [Tooltip("The available weapons.")]
     public ProjectileWeapon[] Weapons;

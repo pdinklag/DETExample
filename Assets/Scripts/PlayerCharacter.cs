@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerCharacter : MonoBehaviour
 {
+    [Tooltip("The character's movement speed.")]
+    public float Speed = 3.0f;
+
     private CharacterController _controller;
     private Weapon _isFiring;
 
@@ -30,7 +33,7 @@ public class PlayerCharacter : MonoBehaviour
         var direction = new Vector3(x, 0, z).normalized;
 
         // move the character
-        _controller.SimpleMove(Level.Instance.Settings.PlayerSpeed * direction);
+        _controller.SimpleMove(Speed * direction);
 
         // rotate the character
         if (x != 0 || z != 0)

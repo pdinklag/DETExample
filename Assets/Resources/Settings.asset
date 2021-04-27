@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 3747712402701638051, guid: 98dbba3f6a67b6e4c890aa3cb831d4ea, type: 3}
-  PlayerSpeed: 3
   Weapons:
   - {fileID: 11400000, guid: 2769d3c240f35ad4eac89e3829e55a23, type: 2}
   - {fileID: 11400000, guid: 4f01d522f26a7cf48bbd41807fa0d0a3, type: 2}
