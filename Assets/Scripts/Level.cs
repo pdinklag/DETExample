@@ -18,6 +18,9 @@ public class Level : MonoBehaviour
     [Tooltip("Where to spawn the player.")]
     public Transform SpawnPoint;
 
+    [Tooltip("The camera controller.")]
+    public CameraController Camera;
+
     private void Awake()
     {
         // there can be only one...
@@ -40,7 +43,8 @@ public class Level : MonoBehaviour
     private void Start()
     {
         // spawn the player
-        Instantiate(Settings.PlayerPrefab, SpawnPoint.position, SpawnPoint.rotation);
+        var pc = Instantiate(Settings.PlayerPrefab, SpawnPoint.position, SpawnPoint.rotation);
+        Camera.Player = pc;
     }
 
     private void OnDestroy()
