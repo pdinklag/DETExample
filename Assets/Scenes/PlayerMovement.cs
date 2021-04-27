@@ -50,25 +50,37 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.rotation = angle;
     }
     void OnTriggerEnter2D(Collider2D other) { 
-       
+        if(Corona(other.gameObject))
+        {
+            takeDemage(5);
+        }
         if(Schlagstock(other.gameObject))
         {
-            leben-=10;
-            if(leben==0)
+            
+            if(!takeDemage(10))
             {
-                Destroy(gameObject);
-            }
-            else
-            {
-                    Vector3 positionPlayer=transform.position;
-                    Vector3 positionOther=other.gameObject.transform.position;
-                    Vector3 flug=(positionPlayer-positionOther);
-                    rigidbody.MovePosition(rigidbody.position+new Vector2(flug.x,flug.y));
+                Vector3 positionPlayer=transform.position;
+                Vector3 positionOther= other.gameObject.transform.position;
+                Vector3 flug=(positionPlayer-positionOther);
+                rigidbody.MovePosition(rigidbody.position+new Vector2(flug.x,flug.y));
             }
         } 
     }
+    /*
+    returns whether the player dies or not
+    */
+    private bool takeDemage(int demage)
+    {
+        leben-=10;
+        if(leben<=0)
+        {
+            Destroy(gameObject);
+            return true;
+        }
+        return false;
+    }
     void OnCollisionEnter2D(Collision2D collision) {
-        
+         
     }
     bool Schlagstock(GameObject other)
     {
@@ -78,5 +90,18 @@ public class PlayerMovement : MonoBehaviour
         }
         Schlagstock schlagstock=other.GetComponent<Schlagstock>();
         return schlagstock!=null;
+    }
+    bool Corona(GameObject other)
+    {
+        if(!other.CompareTag("WaffeGegner"))
+        {
+            return false;
+        }
+        bullet bullet=other.GetComponent<bullet>();
+        if(bullet==null)
+        {
+            return false;
+        }
+        return bullet.typ==2;
     }
 }

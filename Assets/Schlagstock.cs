@@ -10,6 +10,8 @@ public class Schlagstock : MonoBehaviour
     public Rigidbody2D rigidbody;
 
     public Rigidbody2D userRigidbody;
+
+    public float speed;//a bit higher than user speed 
     // Start is called before the first frame update
     void Start()
     {
@@ -30,14 +32,16 @@ public class Schlagstock : MonoBehaviour
     {
        Move();
     }
-    /*void setMovementToUser()
+    void setMovementToUser()
     {
-         Vector3 positionBesitzer=transform.parent.position;
+         Vector3 positionBesitzer=userRigidbody.transform.position;
         Vector3 position=gameObject.transform.position;
-        moveDirection.x=positionPlayer.x-position.x;
-        moveDirection.y=positionPlayer.y-position.y;
-    }*/
+        moveDirection.x=positionBesitzer.x-position.x+0.5f;
+        moveDirection.y=positionBesitzer.y-position.y;
+        moveDirection=moveDirection.normalized;
+    }
     void Move() {
-        rigidbody.velocity = userRigidbody.velocity;
+        setMovementToUser();
+        rigidbody.velocity = moveDirection*speed;
     }
 }
