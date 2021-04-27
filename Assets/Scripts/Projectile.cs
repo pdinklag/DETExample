@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
+    [Tooltip("An identifier.")]
+    public string ID;
+
     [Tooltip("The number of seconds after which this projectile will automatically destroy itself.")]
     public float Lifetime = 3.0f;
 
