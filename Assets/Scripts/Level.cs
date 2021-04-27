@@ -33,7 +33,6 @@ public class Level : MonoBehaviour
         else
         {
             Instance = this;
-            Debug.Log("registered Level instance", Instance);
         }
 
         // load settings
@@ -52,7 +51,6 @@ public class Level : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
-            Debug.Log("unregistered Level instance", Instance);
         }
     }
 }
