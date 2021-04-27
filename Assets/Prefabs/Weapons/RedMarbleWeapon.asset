@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fed534beb3c0b6428e7808cdb981edf, type: 3}
+  m_Script: {fileID: 11500000, guid: cd624822bea4bc540b98b5c71ef462ba, type: 3}
   m_Name: RedMarbleWeapon
   m_EditorClassIdentifier: 
+  DisplayName: Red Marble
+  FireCooldown: 0.25
   Projectile: {fileID: 6711940410355066814, guid: 172043902effbd64d8d3a208e63d48af, type: 3}
-  FireOffset: {x: 0, y: 1, z: 0.5}
+  FireOffset: {x: 0, y: 1, z: 0.25}
   FireVelocity: {x: 0, y: 1, z: 7.5}

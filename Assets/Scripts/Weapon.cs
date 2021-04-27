@@ -1,28 +1,22 @@
+using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
-public class Weapon : ScriptableObject
+/// <summary>
+/// Abstract base for weapons.
+/// </summary>
+public abstract class Weapon : ScriptableObject
 {
-    [Tooltip("The projectile to spawn.")]
-    public Projectile Projectile;
+    [Header("Weapon")]
+    [Tooltip("The display name of the weapon.")]
+    public string DisplayName;
 
-    [Tooltip("The player-relative position to spawn a fired projectile at.")]
-    public Vector3 FireOffset = new Vector3(0, 1, 1);
-
-    [Tooltip("The velocity at which projectiles are fired.")]
-    public Vector3 FireVelocity = new Vector3(0, 1, 5);
+    [Tooltip("After the weapon has fired, this many seconds need to pass before the player can fire again.")]
+    public float FireCooldown = 0.5f;
 
     /// <summary>
-    /// Fires a projectile.
+    /// Fires the weapon.
     /// </summary>
-    /// <param name="pc">the player character</param>
-    public void Fire(PlayerCharacter pc)
-    {
-        var direction = pc.transform.rotation;
-        var projectile = Instantiate(Projectile, pc.transform.position + direction * FireOffset, direction);
-        if (projectile.TryGetComponent<Rigidbody>(out var rigidbody))
-        {
-            rigidbody.velocity = direction * FireVelocity;
-        }
-    }
+    /// <param name="pc">the player character firing the weapon</param>
+    /// <returns>the coroutine enumerator</returns>
+    public abstract IEnumerator CoFire(PlayerCharacter pc);
 }

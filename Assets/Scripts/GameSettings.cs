@@ -21,12 +21,12 @@ public class GameSettings : ScriptableObject
 
     [Header("Weapons")]
     [Tooltip("The available weapons.")]
-    public Weapon[] Weapons;
+    public ProjectileWeapon[] Weapons;
 
     /// <summary>
     /// Gets the i-th weapon.
     /// </summary>
     /// <param name="i">the weapon number</param>
     /// <returns>the i-th weapon, or null if it does not exist</returns>
-    public Weapon GetWeapon(int i) => (i >= 0 && i < Weapons.Length) ? Weapons[i] : null;
+    public ProjectileWeapon GetWeapon(int i) => (i >= 0 && i < Weapons.Length) ? Weapons[i] : null;
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,7 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
     private CharacterController _controller;
+    private Weapon _isFiring;
 
     private void Start()
     {
@@ -42,13 +44,37 @@ public class PlayerCharacter : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             // fire first weapon
-            Level.Instance.Settings.GetWeapon(0).Fire(this);
+            FireWeapon(Level.Instance.Settings.GetWeapon(0));
         }
         else if (Input.GetButtonDown("Fire2"))
         {
             // fire second weapon
-            Level.Instance.Settings.GetWeapon(1).Fire(this);
+            FireWeapon(Level.Instance.Settings.GetWeapon(1));
         }
+    }
+
+    private void FireWeapon(Weapon w)
+    {
+        if (!_isFiring)
+        {
+            // start fire in a coroutine, unless already firing with another weapon
+            StartCoroutine(CoFireWeapon(w));
+        }
+    }
+
+    private IEnumerator CoFireWeapon(Weapon w)
+    {
+        // lock fire
+        _isFiring = w;
+
+        // start weapon's fire coroutine and wait for it
+        yield return w.CoFire(this);
+
+        // wait for weapon's cooldown to expire
+        yield return new WaitForSeconds(w.FireCooldown);
+
+        // we are no longer firing
+        _isFiring = null;
     }
 
     private void FixedUpdate()
