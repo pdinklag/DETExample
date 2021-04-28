@@ -264,7 +264,7 @@ public class Impfbar : MonoBehaviour
     }
     private void shootVirus(Vector3 positionSpawn, Vector3 force3)
     {
-        Debug.Log("Position: "+positionSpawn+" Force: "+force3);
+        //Debug.Log("Position: "+positionSpawn+" Force: "+force3);
         //Debug.Log("Position Normalo: "+gameObject.transform.position+" Normalo Velocity: "+rigidbody.velocity+" Position Virus: "+positionSpawn+" Force: "+force);
         Vector2 force=new Vector2(force3.x,force3.y);
         GameObject virus = Instantiate(virusPrefab, positionSpawn, gameObject.transform.rotation);

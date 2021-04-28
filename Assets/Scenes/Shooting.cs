@@ -37,7 +37,7 @@ public class Shooting : MonoBehaviour
     }
     void Shoot(Vector2 force, Vector3 positionSpawn)
     {
-        Debug.Log("Position: "+positionSpawn+" Force: "+force);
+        //Debug.Log("Position: "+positionSpawn+" Force: "+force);
          GameObject bullet = Instantiate(bulletPrefab, positionSpawn, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(force * bulletForce, ForceMode2D.Impulse);
