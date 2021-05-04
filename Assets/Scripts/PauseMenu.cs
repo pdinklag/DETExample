@@ -17,6 +17,6 @@ public class PauseMenu : MonoBehaviour
     public void OnExitToMainMenuClicked()
     {
         Time.timeScale = 1.0f; // un-pause!
-        SceneManager.LoadScene(MainMenuSceneName);
+        SceneManager.LoadScene(MainMenuSceneName, LoadSceneMode.Single);
     }
 }
