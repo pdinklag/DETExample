@@ -85,4 +85,13 @@ public class PlayerCharacter : MonoBehaviour
     {
         HandleWeapon();
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // test if we hit a wall trigger platform
+        if(hit.collider.TryGetComponent<WallTriggerPlatform>(out var platform))
+        {
+            platform.Wall.Trigger();
+        }
+    }
 }

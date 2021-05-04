@@ -23,7 +23,10 @@ public class MovableWall : MonoBehaviour, RayWeapon.HitListener
 
     private bool _moving;
 
-    private void Trigger()
+    /// <summary>
+    /// Triggers the wall.
+    /// </summary>
+    public void Trigger()
     {
         // make sure we are not already moving
         if (!_moving)
