@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 3
   PrimaryWeapon: {fileID: 11400000, guid: 2769d3c240f35ad4eac89e3829e55a23, type: 2}
-  SecondaryWeapon: {fileID: 11400000, guid: 4f01d522f26a7cf48bbd41807fa0d0a3, type: 2}
+  SecondaryWeapon: {fileID: 11400000, guid: 328ca79af3dbfec449dfc518bb4a18d2, type: 2}
 --- !u!1 &4480177272581796706
 GameObject:
   m_ObjectHideFlags: 0
