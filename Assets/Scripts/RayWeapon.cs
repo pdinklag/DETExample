@@ -1,10 +1,26 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// A weapon that fires an instantly hitting ray.
+/// </summary>
 [CreateAssetMenu(fileName = "RayWeapon", menuName = "Weapon/Ray")]
 public class RayWeapon : Weapon
 {
+    /// <summary>
+    /// Interface for raycast hit listeners.
+    /// </summary>
+    public interface HitListener
+    {
+        /// <summary>
+        /// Called when hit by ray weapon fire.
+        /// </summary>
+        /// <param name="weapon">the weapon</param>
+        /// <param name="instigator">the player who fired</param>
+        /// <param name="hit">information on the raycast hit</param>
+        void OnHitByRayWeapon(RayWeapon weapon, PlayerCharacter instigator, RaycastHit hit);
+    }
+
     [Header("Ray Weapon")]
     [Tooltip("The ray prefab to spawn.")]
     public LineRenderer RayEffectPrefab;
@@ -39,6 +55,13 @@ public class RayWeapon : Weapon
                     closestDistance = hit.distance;
                     closest = hit;
                 }
+            }
+
+            // test and retrieve the hit collider for a listener component
+            if (closest.collider.TryGetComponent<HitListener>(out var listener))
+            {
+                // notify listener
+                listener.OnHitByRayWeapon(this, pc, closest);
             }
 
             // set line renderer endpoints
