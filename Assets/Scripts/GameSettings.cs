@@ -15,15 +15,4 @@ public class GameSettings : ScriptableObject
     [Header("Player")]
     [Tooltip("The player prefab.")]
     public PlayerCharacter PlayerPrefab;
-
-    [Header("Weapons")]
-    [Tooltip("The available weapons.")]
-    public ProjectileWeapon[] Weapons;
-
-    /// <summary>
-    /// Gets the i-th weapon.
-    /// </summary>
-    /// <param name="i">the weapon number</param>
-    /// <returns>the i-th weapon, or null if it does not exist</returns>
-    public ProjectileWeapon GetWeapon(int i) => (i >= 0 && i < Weapons.Length) ? Weapons[i] : null;
 }

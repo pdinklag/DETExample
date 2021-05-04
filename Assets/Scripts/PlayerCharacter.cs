@@ -7,8 +7,16 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerCharacter : MonoBehaviour
 {
+    [Header("Stats")]
     [Tooltip("The character's movement speed.")]
     public float Speed = 3.0f;
+
+    [Header("Weapons")]
+    [Tooltip("The character's LMB weapon.")]
+    public Weapon PrimaryWeapon;
+
+    [Tooltip("The character's RMB weapon.")]
+    public Weapon SecondaryWeapon;
 
     private CharacterController _controller;
     private Weapon _isFiring;
@@ -44,15 +52,15 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleWeapon()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (PrimaryWeapon && Input.GetButtonDown("Fire1"))
         {
             // fire first weapon
-            FireWeapon(Level.Instance.Settings.GetWeapon(0));
+            FireWeapon(PrimaryWeapon);
         }
-        else if (Input.GetButtonDown("Fire2"))
+        else if (SecondaryWeapon && Input.GetButtonDown("Fire2"))
         {
             // fire second weapon
-            FireWeapon(Level.Instance.Settings.GetWeapon(1));
+            FireWeapon(SecondaryWeapon);
         }
     }
 
