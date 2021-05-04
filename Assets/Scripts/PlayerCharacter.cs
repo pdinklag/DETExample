@@ -83,7 +83,10 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Update()
     {
-        HandleWeapon();
+        if (!Level.Instance.Paused)
+        {
+            HandleWeapon();
+        }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

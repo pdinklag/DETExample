@@ -15,4 +15,8 @@ public class GameSettings : ScriptableObject
     [Header("Player")]
     [Tooltip("The player prefab.")]
     public PlayerCharacter PlayerPrefab;
+
+    [Header("UI")]
+    [Tooltip("The pause menu prefab.")]
+    public GameObject PauseMenuPrefab;
 }
