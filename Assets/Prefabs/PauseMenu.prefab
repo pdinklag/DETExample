@@ -187,7 +187,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6232343781920239454}
+      - m_Target: {fileID: 2342887701245271555}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: OnBackToGameClicked
         m_Mode: 1
@@ -481,6 +481,7 @@ GameObject:
   - component: {fileID: 6232343781669800799}
   - component: {fileID: 6232343781669800798}
   - component: {fileID: 6232343781669800797}
+  - component: {fileID: 2342887701245271555}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -572,6 +573,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2342887701245271555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6232343781669800796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b111df89321e1c442b1a3ad83db1b0a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainMenuSceneName: MainMenuScene
 --- !u!1 &6232343781920239451
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +596,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6232343781920239452}
   - component: {fileID: 6232343781920239453}
-  - component: {fileID: 6232343781920239454}
   m_Layer: 5
   m_Name: ButtonContainer
   m_TagString: Untagged
@@ -637,18 +650,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &6232343781920239454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6232343781920239451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b111df89321e1c442b1a3ad83db1b0a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6232343782182837728
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,7 +979,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6232343781920239454}
+      - m_Target: {fileID: 2342887701245271555}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: OnExitToMainMenuClicked
         m_Mode: 1
