@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +16,16 @@ public class WeaponPickup : MonoBehaviour
     [Tooltip("The visual item to be disabled when picked up.")]
     public GameObject Item;
 
+    [Tooltip("The text to display when picked up.")]
+    public TextMeshPro Text;
+
     private bool _pickedUp;
+
+    private void Start()
+    {
+        Text.text = string.Format(Level.Instance.Settings.PickupText, Weapon.GetColoredDisplayName());
+        Text.gameObject.SetActive(false);
+    }
 
     private IEnumerator CoPickup()
     {
@@ -23,6 +33,7 @@ public class WeaponPickup : MonoBehaviour
         _pickedUp = true;
         if (Item)
         {
+            Text.gameObject.SetActive(true);
             Item.SetActive(false);
         }
 
@@ -32,6 +43,7 @@ public class WeaponPickup : MonoBehaviour
         // re-enable
         if (Item)
         {
+            Text.gameObject.SetActive(false);
             Item.SetActive(true);
         }
         _pickedUp = false;

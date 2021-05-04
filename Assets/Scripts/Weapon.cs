@@ -10,6 +10,9 @@ public abstract class Weapon : ScriptableObject
     [Tooltip("The display name of the weapon.")]
     public string DisplayName;
 
+    [Tooltip("The color to use when displaying the weapon name.")]
+    public Color DisplayTextColor;
+    
     [Tooltip("The player-relative position to spawn a fired projectile or ray at.")]
     public Vector3 FireOffset = new Vector3(0, 1, 1);
 
@@ -36,4 +39,10 @@ public abstract class Weapon : ScriptableObject
     /// <param name="pc">the player character firing the weapon</param>
     /// <returns>the coroutine enumerator</returns>
     public abstract IEnumerator CoFire(PlayerCharacter pc);
+
+    /// <summary>
+    /// Gets the display name with color tag for display.
+    /// </summary>
+    /// <returns>the colored display name</returns>
+    public string GetColoredDisplayName() => string.Format("<color=#{0}>{1}</color>", ColorUtility.ToHtmlStringRGB(DisplayTextColor), DisplayName);
 }

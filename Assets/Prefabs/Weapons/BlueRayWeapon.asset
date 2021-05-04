@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BlueRayWeapon
   m_EditorClassIdentifier: 
   DisplayName: Blue Ray
+  DisplayTextColor: {r: 0, g: 0.83333325, b: 1, a: 1}
   FireOffset: {x: 0, y: 1.5, z: 0.5}
   FireCooldown: 0.5
   RayEffectPrefab: {fileID: 2926544658060336820, guid: 39d14f016cee08840a849f822a038b5d, type: 3}

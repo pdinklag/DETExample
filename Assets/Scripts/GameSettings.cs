@@ -19,4 +19,7 @@ public class GameSettings : ScriptableObject
     [Header("UI")]
     [Tooltip("The pause menu prefab.")]
     public GameObject PauseMenuPrefab;
+
+    [Tooltip("The text to be displayed when an item is picked up.")]
+    public string PickupText = "Picked up {0}.";
 }
