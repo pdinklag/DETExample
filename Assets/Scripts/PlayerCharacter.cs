@@ -11,15 +11,9 @@ public class PlayerCharacter : MonoBehaviour
     [Tooltip("The character's movement speed.")]
     public float Speed = 3.0f;
 
-    [Header("Weapons")]
-    [Tooltip("The character's LMB weapon.")]
-    public Weapon PrimaryWeapon;
-
-    [Tooltip("The character's RMB weapon.")]
-    public Weapon SecondaryWeapon;
-
     private CharacterController _controller;
-    private Weapon _isFiring;
+    private Weapon _weapon;
+    private bool _isFiring;
 
     private void Start()
     {
@@ -29,6 +23,15 @@ public class PlayerCharacter : MonoBehaviour
             Debug.LogError("failed to find character controller", this);
             enabled = false; // disables Update
         }
+    }
+
+    /// <summary>
+    /// Gives the player a weapon.
+    /// </summary>
+    /// <param name="weapon">the weapon</param>
+    public void GiveWeapon(Weapon weapon)
+    {
+        _weapon = weapon;
     }
 
     private void HandleMovement()
@@ -52,40 +55,25 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleWeapon()
     {
-        if (PrimaryWeapon && Input.GetButtonDown("Fire1"))
+        if (_weapon && !_isFiring && Input.GetButtonDown("Fire1"))
         {
-            // fire first weapon
-            FireWeapon(PrimaryWeapon);
-        }
-        else if (SecondaryWeapon && Input.GetButtonDown("Fire2"))
-        {
-            // fire second weapon
-            FireWeapon(SecondaryWeapon);
+            StartCoroutine(CoFireWeapon());
         }
     }
 
-    private void FireWeapon(Weapon w)
-    {
-        if (!_isFiring)
-        {
-            // start fire in a coroutine, unless already firing with another weapon
-            StartCoroutine(CoFireWeapon(w));
-        }
-    }
-
-    private IEnumerator CoFireWeapon(Weapon w)
+    private IEnumerator CoFireWeapon()
     {
         // lock fire
-        _isFiring = w;
+        _isFiring = true;
 
         // start weapon's fire coroutine and wait for it
-        yield return w.CoFire(this);
+        yield return _weapon.CoFire(this);
 
         // wait for weapon's cooldown to expire
-        yield return new WaitForSeconds(w.FireCooldown);
+        yield return new WaitForSeconds(_weapon.FireCooldown);
 
         // we are no longer firing
-        _isFiring = null;
+        _isFiring = false;
     }
 
     private void FixedUpdate()
