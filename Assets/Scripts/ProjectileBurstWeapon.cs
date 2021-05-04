@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// A weapon that fires projectiles in a burst.
 /// </summary>
+[CreateAssetMenu(fileName = "ProjectileBurstWeapon", menuName = "Weapon/Projectile Burst")]
 public class ProjectileBurstWeapon : ProjectileWeapon
 {
     [Header("Projectile Burst")]
