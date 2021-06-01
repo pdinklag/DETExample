@@ -11,9 +11,16 @@ public class PlayerCharacter : MonoBehaviour
     [Tooltip("The character's movement speed.")]
     public float Speed = 3.0f;
 
+    [Tooltip("The character's rotation speed in degrees per second.")]
+    public float RotSpeed = 270.0f;
+
+    private Animator _anim;
     private CharacterController _controller;
     private Weapon _weapon;
     private bool _isFiring;
+
+    private float _currentSpeed = 0;
+    private float _currentAcceleration = 0;
 
     private void Start()
     {
@@ -22,7 +29,11 @@ public class PlayerCharacter : MonoBehaviour
         {
             Debug.LogError("failed to find character controller", this);
             enabled = false; // disables Update
+            return;
         }
+
+        // try to retrieve the animator
+        TryGetComponent(out _anim);
     }
 
     /// <summary>
@@ -32,6 +43,12 @@ public class PlayerCharacter : MonoBehaviour
     public void GiveWeapon(Weapon weapon)
     {
         _weapon = weapon;
+
+        // activate weapon layer in Animator
+        if (_anim)
+        {
+            _anim.SetLayerWeight(1, weapon ? 1.0f : 0.0f);
+        }
     }
 
     private void HandleMovement()
@@ -43,13 +60,28 @@ public class PlayerCharacter : MonoBehaviour
         // compute move direction
         var direction = new Vector3(x, 0, z).normalized;
 
+        // test if walking
+        var walking = direction.magnitude > 0;
+
+        // set flag in animator
+        if (_anim)
+        {
+            _anim.SetBool("Walking", walking);
+        }
+
+        // update speed and acceleration
+        _currentSpeed = Mathf.SmoothDamp(_currentSpeed, walking ? Speed : 0, ref _currentAcceleration, 0.125f);
+
         // move the character
-        _controller.SimpleMove(Speed * direction);
+        if (_currentSpeed > 0)
+        {
+            _controller.SimpleMove(_currentSpeed * direction);
+        }
 
         // rotate the character
-        if (x != 0 || z != 0)
+        if (walking)
         {
-            transform.rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), RotSpeed * Time.deltaTime);
         }
     }
 
@@ -66,11 +98,24 @@ public class PlayerCharacter : MonoBehaviour
         // lock fire
         _isFiring = true;
 
+        // set trigger in animator
+        // reset trigger in animator
+        if (_anim)
+        {
+            _anim.SetTrigger("Fire");
+        }
+
         // start weapon's fire coroutine and wait for it
         yield return _weapon.CoFire(this);
 
         // wait for weapon's cooldown to expire
         yield return new WaitForSeconds(_weapon.FireCooldown);
+
+        // reset trigger in animator
+        if (_anim)
+        {
+            _anim.ResetTrigger("Fire");
+        }
 
         // we are no longer firing
         _isFiring = false;
@@ -92,7 +137,7 @@ public class PlayerCharacter : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         // test if we hit a wall trigger platform
-        if(hit.collider.TryGetComponent<WallTriggerPlatform>(out var platform))
+        if (hit.collider.TryGetComponent<WallTriggerPlatform>(out var platform))
         {
             platform.Wall.Trigger();
         }
