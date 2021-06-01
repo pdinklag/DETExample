@@ -768,6 +768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2427d51858781dc489cfd1c77cb60b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerPrefab: {fileID: 2641076084749933134, guid: 6c87552d7e47167448ad3e1edfb91ed6, type: 3}
   SpawnPoint: {fileID: 1508517494}
   Camera: {fileID: 963194229}
 --- !u!4 &762635276
