@@ -20,6 +20,9 @@ public class Level : MonoBehaviour
     /// </summary>
     public bool Paused { get; private set; }
 
+    [Tooltip("Spawn a player on startup?")]
+    public PlayerCharacter PlayerPrefab;
+
     [Tooltip("Where to spawn the player.")]
     public Transform SpawnPoint;
 
@@ -52,9 +55,12 @@ public class Level : MonoBehaviour
 
     private void Start()
     {
-        // spawn the player
-        var pc = Instantiate(Settings.PlayerPrefab, SpawnPoint.position, SpawnPoint.rotation);
-        Camera.Player = pc;
+        if (PlayerPrefab)
+        {
+            // spawn the player
+            var pc = Instantiate(PlayerPrefab, SpawnPoint.position, SpawnPoint.rotation);
+            Camera.Player = pc;
+        }
     }
 
     public void PauseGame(bool pause)

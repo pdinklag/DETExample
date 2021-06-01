@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b96b1f8f1b5a14190238b1e9cc8c20, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 3747712402701638051, guid: 98dbba3f6a67b6e4c890aa3cb831d4ea, type: 3}
   PauseMenuPrefab: {fileID: 6232343781669800796, guid: 6123ecf88fefe9742897a12bb788f317, type: 3}
+  PickupText: Picked up {0}.
