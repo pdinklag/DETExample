@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// An object containing information about the current level.
@@ -78,7 +79,7 @@ public class Level : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             PauseGame(!Paused);
         }

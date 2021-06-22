@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// A very simple player character.
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerCharacter : MonoBehaviour
 {
     [Header("Stats")]
@@ -18,6 +20,7 @@ public class PlayerCharacter : MonoBehaviour
     private CharacterController _controller;
     private Weapon _weapon;
     private bool _isFiring;
+    private Vector2 _inputDirection;
 
     private float _currentSpeed = 0;
     private float _currentAcceleration = 0;
@@ -53,12 +56,8 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleMovement()
     {
-        // get input axes
-        var x = Input.GetAxis("Horizontal");
-        var z = Input.GetAxis("Vertical");
-
-        // compute move direction
-        var direction = new Vector3(x, 0, z).normalized;
+        // get direction
+        var direction = new Vector3(_inputDirection.x, 0, _inputDirection.y);
 
         // test if walking
         var walking = direction.magnitude > 0;
@@ -85,11 +84,19 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
-    private void HandleWeapon()
+    public void OnInputMove(InputAction.CallbackContext context)
     {
-        if (_weapon && !_isFiring && Input.GetButtonDown("Fire1"))
+        _inputDirection = context.performed ? context.ReadValue<Vector2>() : Vector2.zero;
+    }
+
+    public void OnInputFire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            StartCoroutine(CoFireWeapon());
+            if (_weapon && !_isFiring)
+            {
+                StartCoroutine(CoFireWeapon());
+            }
         }
     }
 
@@ -124,14 +131,6 @@ public class PlayerCharacter : MonoBehaviour
     private void FixedUpdate()
     {
         HandleMovement();
-    }
-
-    private void Update()
-    {
-        if (!Level.Instance.Paused)
-        {
-            HandleWeapon();
-        }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
